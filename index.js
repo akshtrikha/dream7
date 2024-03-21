@@ -8,28 +8,44 @@ const port = process.env.PORT;
 
 app.use(express.json());
 
-// app.get("/teams", async (req, res) => {
-//   const matchId = req.query.matchId;
-//   console.log("matchId: " + matchId);
+app.get("/players", async (req, res) => {
+  const matchId = req.query.matchId;
+  console.log("GET /players")
+  console.log("matchId: " + matchId);
 
-//   const options = {
-//     method: "GET",
-//     url: `https://cricbuzz-cricket.p.rapidapi.com/mcenter/v1/${matchId}`,
-//     headers: {
-//       "X-RapidAPI-Key": "a77584eb69msh69fb7d597d14f23p16e353jsn16a8a0f9a186",
-//       "X-RapidAPI-Host": "cricbuzz-cricket.p.rapidapi.com",
-//     },
-//   };
+  const options = {
+    method: "GET",
+    url: `https://cricbuzz-cricket.p.rapidapi.com/mcenter/v1/${matchId}`,
+    headers: {
+      "X-RapidAPI-Key": "a77584eb69msh69fb7d597d14f23p16e353jsn16a8a0f9a186",
+      "X-RapidAPI-Host": "cricbuzz-cricket.p.rapidapi.com",
+    },
+  };
 
-//   try {
-//     const response = await axios.request(options);
-//     // console.log(response.data);
-//     return res.status(200).json(response.data.);
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(400).json({ error });
-//   }
-// });
+  try {
+    const response = await axios.request(options);
+
+    const team1Players = response.data.matchInfo.team1.playerDetails;
+    const team2Players = response.data.matchInfo.team2.playerDetails;
+
+    let players = { batsmen: [], bowlers: [], allRounders: [] };
+    team1Players.forEach((player) => {
+      if (player.role.toLowerCase().includes("allrounder")) {
+        players.allRounders.push({ id: player.id, name: player.name });
+      } else if (player.role.toLowerCase().includes("batsman")) {
+        players.batsmen.push({ id: player.id, name: player.name });
+      } else if (player.role.toLowerCase().includes("bowler")) {
+        players.bowlers.push({ id: player.id, name: player.name });
+      }
+    });
+
+    return res.status(200).json(players)
+
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({ error });
+  }
+});
 
 app.get("/match/:id", async (req, res) => {
   const matchId = req.params.id;
