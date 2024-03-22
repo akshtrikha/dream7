@@ -50,10 +50,11 @@ export const scoreRules = {
 };
 
 export const batsmenPointsCard = function (batsmenData) {
-  // teamData1.batTeamDetails.batsmenData
   let pointsCard = [];
   for (const batsmanKey in batsmenData) {
     const batsman = batsmenData[batsmanKey];
+    const name = batsman.batName;
+    const id = batsman.batId;
     const runs = batsman.runs;
     const fours = batsman.fours;
     const sixes = batsman.sixes;
@@ -80,17 +81,19 @@ export const batsmenPointsCard = function (batsmenData) {
     }
     // console.log(points)
 
-    pointsCard.push(points);
+    pointsCard.push({ id, name, points });
   }
 
   // console.log(pointsCard)
   return pointsCard;
 };
 
-export const bowlerPointsCard = function (bowlerData) {
+export const bowlersPointsCard = function (bowlerData) {
   let pointsCard = [];
   for (const bowlerKey in bowlerData) {
     const bowler = bowlerData[bowlerKey];
+    const name = bowler.bowlName;
+    const id = bowler.bowlerId;
     const wickets = bowler.wickets;
     const maidens = bowler.maidens;
     const economy = bowler.economy;
@@ -109,7 +112,7 @@ export const bowlerPointsCard = function (bowlerData) {
     else if (economy < 6) points += scoreRules.economyRatePoints.below6;
     else if (economy < 7) points += scoreRules.economyRatePoints.below7;
 
-    pointsCard.push(points);
+    pointsCard.push({ id: id, name, points: points });
   }
 
   // console.log(pointsCard)
