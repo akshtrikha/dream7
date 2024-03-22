@@ -67,8 +67,7 @@ export const batsmenPointsCard = function (batsmenData) {
 
     if (runs >= 100) points += scoreRules.batting.centuryBonus;
     else if (runs >= 50) points += scoreRules.batting.halfCenturyBonus;
-    else if (runs >= 30)
-      points += scoreRules.batting.thirtyRunBonusutils / score - engine.js;
+    else if (runs >= 30) points += scoreRules.batting.thirtyRunBonus;
     else if (runs === 0) points -= scoreRules.batting.dismissalForDuck;
 
     if (ballsFaced >= 10) {
