@@ -17,8 +17,8 @@ app.get("/players", async (req, res) => {
     method: "GET",
     url: `https://cricbuzz-cricket.p.rapidapi.com/mcenter/v1/${matchId}`,
     headers: {
-      "X-RapidAPI-Key": "a77584eb69msh69fb7d597d14f23p16e353jsn16a8a0f9a186",
-      "X-RapidAPI-Host": "cricbuzz-cricket.p.rapidapi.com",
+      "X-RapidAPI-Key": process.env.XRapidAPIKey,
+      "X-RapidAPI-Host": process.env.XRapidAPIHost,
     },
   };
 
@@ -30,6 +30,16 @@ app.get("/players", async (req, res) => {
 
     let players = { batsmen: [], bowlers: [], allRounders: [] };
     team1Players.forEach((player) => {
+      if (player.role.toLowerCase().includes("allrounder")) {
+        players.allRounders.push({ id: player.id, name: player.name });
+      } else if (player.role.toLowerCase().includes("batsman")) {
+        players.batsmen.push({ id: player.id, name: player.name });
+      } else if (player.role.toLowerCase().includes("bowler")) {
+        players.bowlers.push({ id: player.id, name: player.name });
+      }
+    });
+
+    team2Players.forEach((player) => {
       if (player.role.toLowerCase().includes("allrounder")) {
         players.allRounders.push({ id: player.id, name: player.name });
       } else if (player.role.toLowerCase().includes("batsman")) {
